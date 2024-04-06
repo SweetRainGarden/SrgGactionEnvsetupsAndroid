@@ -1,0 +1,66 @@
+name: Job env set up
+description: Sets up the Java and Gradle
+inputs:
+  isDebug:
+    description: 'is Debug mode'
+    required: false
+    default: 'true'
+runs:
+  using: "composite"
+  steps:
+    - name: "BBB -> Init Env --> 1: check PR not merged but closed"
+      id: check_is_pr_not_merged_and_closed
+      shell: bash
+      if: ${{ (github.event.pull_request.merged == false) && (github.event.action == 'closed') }}
+      run: |
+        echo "pull request closed but not merged, fail ci and do nothing..."
+        exit 1
+
+    - name: 'AAA -> Basic --> 2: Check Tree'
+      continue-on-error: true
+      shell: bash
+      if: ${{ inputs.isDebug == 'true' }}
+      run: |
+        if [ "$(command -v tree)" ]; then
+          echo "command \"tree\" exists on system"
+          echo "DEBUG_ENV_TREE_IS_INSTALLED=true" >> $GITHUB_ENV
+          echo "pwd ---> $(pwd)"
+          tree -L 4
+        else
+          echo "command \"tree\" does not exist on system"
+          echo "DEBUG_ENV_TREE_IS_INSTALLED=false" >> $GITHUB_ENV
+        fi
+
+    - name: "Set build env --> 0: Config jq cmd"
+      uses: dcarbone/install-jq-action@v2.1.0
+      with:
+        version: '1.7'
+        force: 'false'
+
+    - name: "Set build env --> 1: Config JDK 17"
+      uses: actions/setup-java@v4.2.1
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: "Set build env --> 3: Android SDK"
+      uses: android-actions/setup-android@v3.2.0
+
+    - name: "Set build env --> 3: Config gradle"
+      uses: gradle/gradle-build-action@v3.1.0
+      with:
+        gradle-version: current
+        build-root-directory: "./${{env.CURRENT_REPO}}"
+
+    - name: Setup Graphviz
+      continue-on-error: true
+      uses: ts-graphviz/setup-graphviz@v2.0.0
+      with:
+        macos-skip-brew-update: 'true'
+  
+    - name: "AAA -> Basic --> 1: Dump Github Context"
+      shell: bash
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT"
