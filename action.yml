@@ -44,7 +44,7 @@ runs:
         distribution: 'temurin'
 
     - name: "Set build env --> 3: Android SDK"
-      uses: android-actions/setup-android@v3.2.0
+      uses: android-actions/setup-android@v3.2.1
 
     - name: "Set build env --> 3: Config gradle"
       uses: gradle/gradle-build-action@v3.2.0
