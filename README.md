@@ -1,2 +1,1 @@
-# WyzeGactionSetupsApp
 # SrgGactionEnvsetupsAndroid
