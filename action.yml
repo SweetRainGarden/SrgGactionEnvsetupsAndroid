@@ -54,7 +54,7 @@ runs:
 
     - name: Setup Graphviz
       continue-on-error: true
-      uses: ts-graphviz/setup-graphviz@v2.0.0
+      uses: ts-graphviz/setup-graphviz@v2.0.2
       with:
         macos-skip-brew-update: 'true'
   
