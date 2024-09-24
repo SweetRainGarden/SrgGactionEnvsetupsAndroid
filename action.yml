@@ -38,7 +38,7 @@ runs:
         force: 'false'
 
     - name: "Set build env --> 1: Config JDK 17"
-      uses: actions/setup-java@v4.2.1
+      uses: actions/setup-java@v4.4.0
       with:
         java-version: '17'
         distribution: 'temurin'
