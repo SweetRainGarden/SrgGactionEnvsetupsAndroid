@@ -32,7 +32,7 @@ runs:
         fi
 
     - name: "Set build env --> 0: Config jq cmd"
-      uses: dcarbone/install-jq-action@v2.1.0
+      uses: dcarbone/install-jq-action@v4.0.1
       with:
         version: '1.7'
         force: 'false'
